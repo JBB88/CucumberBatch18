@@ -1,0 +1,950 @@
+Class 1 - 01/28/2024
+
+Cucumber -
+
+Cucumber - cucumber is a tool
+Gherkin - gherkin is a language
+BDD - BDD is an approach (behavioral driven development)
+
+
+cucumber is a tool which allows us to write gherkin language that helps us implementing BDD approach in test automation.
+
+whenever we write BDD scenarios, we will write from end user point of view.
+
+Given - pre condition
+when - performing actions
+Then - expected result
+And - supporting tag
+
+every test case in cucumber will be considered as scenario.
+
+why framework -
+
+no reporting structure in selenium
+no proper execution point
+no proper segregation of screens of the application
+
+
+group id  - org.syntax
+artifact id - CucumberBatch18
+
+under src - we have 2 folders
+main - developing the application
+test - test the application
+
+delete main - we don't need it
+ in test - we need 2 things
+
+ technical - java
+ non - technical - resources
+
+ the end goal is to test the application
+ functional testing - UI
+
+Given user is navigated to HRMS application
+When user enters admin username and password
+And user clicks on login button
+Then user is successfully logged in
+
+User story - search an employee in HRMS
+Scenario 1 - search employee by ID
+Scenario 2 - search employee by name
+
+Class 2- 01/30/2024
+
+recap -
+Cucumber allows us to write scenarios in gherkin language
+as a maven project, we created the framework skeleton
+
+2 branches/packages in maven project
+
+main - used by developers
+test - here we write code to test the application
+ - java --> for all the technical parts
+ - resources --> for all non technical parts
+
+To write scenarios:
+    - feature files --> in this we write scenarios ( non Java, so we write the code under resources)
+    - steps packages --> to keep all the steps definitions
+
+utils package is for all the utility classes
+
+We need to control the flow of execution
+to execute all the test cases
+to execute some of the test cases
+to execute one of the test cases
+
+Before creating runner class
+Regression testing - test everything / functionality of the system
+Smoke testing - covers the basic / key functionality of the application
+
+Class 3 - 01/31/2024
+
+recap-
+
+runner class
+
+we need the support of junit to work with cucumber
+cucumber options -
+    features - the path of features directory to execute all the TC's ( test cases) in one go
+    glue - the path of the steps package, runner class will find all the step definition here
+    dryRun - if we set it to true, it will stop actual execution and scans all the steps
+             if step is missing, it will give me step definition for the steps
+             if we set it to false, then again execution will start
+    tags - when we need to execute specific group of test cases or any specific TC we use tags
+           there is no limitation of using tags in scenarios
+
+If I want to execute scenarios based on 2 conditions
+
+we need config.properties to add all the configuration parameters
+
+
+
+Class 4 - 02/03/2024
+
+RunnerClass: - why we need it?
+            - to control the flow of execution
+            -@CucumberOptions:
+                - features
+                - glue
+                - dryRun ---> false - execute ; true - scan
+                - tags  ---> to specify the execution of a specific test case @sprint1, @regression , @smoke  or whatever you want to name your tag
+                - plugins --->// {"pretty"}, it prints all the step definitions in the console to make it more readable
+
+CommonMethods:
+                - why we need them?
+                - for code re-usability
+                - we have all the common methods here
+
+
+hooks - we will write the pre-condition and post-condition here
+      - hooks class will always be in steps package!
+      - @Before ---> pre-condition (import io.cucumber.java.Before;)
+      this method will always execute before every scenario
+      because it has before tag which is pre-condition
+      - @After --->post-condition (import io.cucumber.java.After;)
+       this method will always execute after every scenario
+       because it has after tag which is post-condition
+
+       Note: do not forget to comment the "navigating on the application" using # on all the scenarios
+
+Background - in background, we write all the steps in feature file
+             which is common in all the scenarios.
+             Once the flow is broken, we cannot write steps after that in background
+             does not matter how many steps are common after flow is broken, we cannot write
+             them in background because flow has already broke
+
+hooks vs background
+hooks are applicable for all the feature files
+background is applicable for one feature file
+  flow of execution:
+  hooks will execute first
+  then background will execute
+  then scenario will execute
+
+Data Driven Test (DDT):
+    - when your one scenario is executing against multiple sets of data
+      ex: facebook application
+Our framework is hybrid - it supports BDD and DDT
+
+Scenario Outline: - to run the same scenario with different input data.
+        -  is a way to create a template for a scenario and run it with multiple sets of data.
+        - It is particularly useful when you have a similar scenario that needs to be executed with different inputs or parameters
+
+
+Class 05 02/04/2024
+
+RECAP:
+
+Hardcoded
+Properties file
+Feature File
+
+
+We can pass data from feature file in terms of parameters
+"data value", it will be considered as a parameter
+
+We can achieve data driven testing using feature file
+we use examples table with scenario outline to pass multiple sets of data
+
+hooks - will execute depending on the number of data sets
+background - will execute depending on the number of data sets
+scenario - will execute depending on the number of data sets
+
+Assertions -
+in cucumber we use,Junit assertions
+verification ( we do not have codes) and validation ( we have the codes) check points
+
+perform two things (assertions): - from junit
+
+true - checks the existence of the element/text/field
+equals - checks the exact value of the element
+
+verification- when you check the details in SRS (Software Requirements Specification)
+validation - when you write code and check in the application
+
+POM - page object model design pattern
+
+as per this design pattern, we have a class for each page available in website
+we will keep locators for this page in the respective class
+login page locators will be in loginpage class and so on
+we call these locators as object repositories
+
+first, create page class and add object repository
+then create the constructor and call page factory
+then create the object of the class in page initializer class
+then comment out previous web element and call objects  with web elements
+
+Class 06 02/06/2024
+
+RECAP:
+
+worked with excel reader class - to add multiple employees from excel file
+
+data table - to achieve data drive testing, we need data table
+
+Class 07 02/07/2024
+
+RECAP:
+
+data table - for data driven testing, we tested it for one step and not for whole scenario
+
+how we validated the employee from the web table?
+
+target folder - every report what you generate will be available inside target folder
+reports can be html, JSON etc
+
+cucumber maven reporting plugin
+in pom.xml file, we have added it
+
+we are executing maven test command to execute the scripts
+
+Since there can be multiple reasons of the script failure,
+we should re run the failed script,
+we have to add another plugin to rerun the failed test case
+
+different phases of maven lifecycle:
+
+compile - source code converts into binary code
+install - jars will be installed in local repo
+deploy - in this phase. jars will go to remote repo
+package - code will be packaged into jars and transfer
+verify - checks the validity of the code
+test - here code will be tested
+clean - target folder will be deleted
+
+
+Class 08 02/10/2024
+
+RECAP:
+
+When we talk about examples table - we implement it with scenario outline
+key and value in table with example keyword
+keys available in examples table can be used in multiple step of scenario
+
+data table - we implement it with scenario
+key and value in table without keyword
+keys and value in data table will be available for just one step
+
+reports - html report
+why we need to implement htlm? because we need artifacts
+we create it under runner class, under plugin - target folder
+json report -
+runner class, under plugin - target folder
+
+we use pom.xml file as an execution file
+it is our build management too file
+maven is our build management tool
+
+different phases of maven lifecycle:
+
+compile - source code (human) converts into binary code (machine)
+install - jars will be installed in local repo (.m2 folder)
+deploy - in this phase. jars will go to remote repo
+package - code will be packaged into jars and transfer
+verify - checks the validity of the code
+test - here code will be tested (mvn test)
+clean - target folder will be deleted
+
+screenshot method -
+array of byte
+get time stamp method, it returns time in desired pattern
+
+scenario class holds the complete information about execution
+
+log4j
+log file - details -
+
+execution logs - execution details/records
+
+console log -
+
+this is for local execution - log file
+
+instead of reading the details of execution in console, you create separate file
+as log file
+
+
+__________________________________________________________________
+
+API NOTES:
+
+API - Application programming interface
+
+Restaurant -
+
+
+Client - the one who sends the request
+server - the one who responds to the request
+API - the intermediator in between client and server
+
+
+Client - server architecture
+
+1 tier architecture -
+
+Presentation layer - whatever we see on the UI is the presentation layer
+Application/business layer - where the logic of the application is written
+Data layer - where all the data stored. (DB)
+
+when the presentation layer, application layer and data layer are available at one place. 1 tier architecture.
+
+example - desktop based application, standalone application. such as calculator, ms paint, notepad, sticky etc.
+
+
+2 tier architecture -
+
+when the presentation layer is available at one place
+application and data layer are available at another place
+
+example - macd, dominos, subway, starbucks etc.
+
+3 tier architecture -
+
+When the application layer is available at one place
+presentation layer is another place
+data layer is available at another place
+
+example - websites, apps etc
+
+
+n-tier architecture -
+
+When the n number of application layer is available at one place
+n number of presentation layer is another place
+n number of data layer is available at another place
+
+example - FB, IG etc.
+
+Why do we need to Test API?
+
+123ABC
+123ABC
+
+for checking the correct data is transferred or not.
+for security purpose.
+
+
+DNS - domain name server
+
+google.com
+
+operations we did while testing front end and back end
+
+create a record in the system
+retrieving a record from the system
+updating a record in the system
+deleting a record from the system
+
+CRUD Operations -
+
+HTTP - hyper-text transfer protocol - it allows us to communicate over the internet
+
+CRUD -
+
+POST - creating a record, we use POST method
+GET - retrieving a record.
+PUT - updating a record.
+DELETE - deleting a record.
+
+API's which are hosted over the internet are called web services.
+
+All the web services are API's but all the API's are not web services.
+
+There are 2 types of web services -
+- REST (representational state transfer) - less secure -
+- SOAP (Simple object access protocol) - more secure -
+
+We are going to test REST web services -
+
+
+Base URL - uniform resource locator - www.amazon.com
+End point - specific information we need - /home-good-kitchen
+Base URI - Base URL + end Point - www.amazon.com/home-good-kitchen
+
+Swagger document - this document has all the details about API request and reponse.
+
+
+Class 2 -
+
+Recap -
+
+API - it is an intermediator that communicates in between front end to back-end
+
+client - server (API establishes the link of communication)
+
+client - the one who send the request
+server - the one who respond to the request
+API - middle man
+
+
+client - server architecture -
+1-tier architecture - all the layers are in one place.
+2-tier architecture - Presentation layer is at one place, and 2 layers available at another place
+3-tier architecture - presentation is at one place, application is at 2nd place and data layer is at another place
+n-tier architecture - n numbers of all layers available at different locations.
+
+HTTP - it is a protocol which allows us to communicate over the internet.
+
+CRUD - create, retrieve, update, delete
+
+POST, GET, PUT, DELETE
+
+Base URL - the location where all API's are available
+Endpoint - the specific API location we need to work with
+
+Base URI - base URL + end point
+
+Swagger document - this document contains all the details about the API's we need to test.
+QA team will get it from dev team
+
+the first entry you make in any system is admin. with the help of admin, you will perform other operations
+
+Making a request to add an admin user -
+
+Base URL - hrm.syntaxtechs.net/syntaxapi/api
+End point - /createUser.php
+
+Base URI - hrm.syntaxtechs.net/syntaxapi/api/createUser.php
+
+Type of method - POST
+
+Body -
+
+{
+  "name": "adminbatch18",
+  "email": "testbatch18@test.com",
+  "password": "Test@123"
+}
+
+
+Format of the body - In JSON format
+
+Javascript object notation - it is just a format of data in key value pairs
+syntax of JSON
+
+{
+"name":"sohel",
+"country":"india"
+}
+
+
+CONTENT - TYPE - application/json
+
+
+Response -
+Status code  -
+if it is creating a record - 201
+if it is a successfull message - 200
+
+
+
+if the syntax is incorrect - 400
+if the method type is incorrect - 405
+if the problem is with authentication - 403
+if the problem is with the response - 404
+
+POST REQUEST -
+Base URI - Base URL + end point
+Type of Method
+body
+content-type
+
+response - 201 created
+
+-----------------------------------------------------------------
+
+
+there are 2 types of API's - public API and private API
+
+how API keeps security - private API
+
+Authentication and Authorization
+
+Authentication - Confirms your identity and gives you permission to use the system.
+Authorization - Controls whether you are allowed to perform certain operations in the system
+Who are you?
+Are you allowed to use system?
+Show your ID?
+What permission you have?
+
+------------------------------------------------------------------
+
+There are 2 types of applications -
+
+Statefull application - when the state of the server memory is set to true, it is stateful application
+
+Stateless application - when the state of the server memory is set to false, it is stateless application
+
+
+
+-------------------------------------------------------------------
+Generate Token -
+
+Base URI = hrm.syntaxtechs.net/syntaxapi/api/generateToken.php
+Type of Method = POST
+
+Body/Paylod = format of the body JSON
+
+{
+  "email": "testbatch@test118.com",
+  "password": "Test@123"
+}
+
+content-type = application/json
+
+
+response -
+
+Json Web Token - JWT
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.
+eyJpYXQiOjE3MDk0OTIyNjYsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTcwOTUzNTQ2NiwidXNlcklkIjoiNjQ1MiJ9.
+i0CMC7ZOZM4cVdYFnnjZdsYAYs7Ejex2eFx_bFKyxRw
+
+JWT has 3 parts -
+header -
+type of token and algorithm used to generate it
+payload -
+issuer, time of issue, expiry time, user id
+signature -
+verify the same message has been transferred from server to client
+
+
+JWT has 3 types -
+
+Bearer token
+MAC token
+Grants
+
+
+mostly we work with bearer token
+
+--------------------------------------------------------------------------------------
+
+CREATE AN EMPLOYEE -
+
+Base URI - hrm.syntaxtechs.net/syntaxapi/api/createEmployee.php
+Type of method - POST
+Payload -
+
+{
+  "emp_firstname": "mario",
+  "emp_lastname": "germeen",
+  "emp_middle_name": "ms",
+  "emp_gender": "M",
+  "emp_birthday": "2004-08-05",
+  "emp_status": "permanent",
+  "emp_job_title": "QA Engineer"
+}
+
+content-type = application/json
+
+201 created
+
+- API is not taking the correct data from server
+- Server is not adding gender there
+
+
+Class 3 -
+
+Recap -
+
+creating an admin - to perform all CRUD operations, we need an admin.
+
+base URI = base URL + endpoint
+
+swagger document - dev team will provide it
+
+body/payload - it's needed in POST request
+
+json
+
+
+Public API and Private API
+
+Authentication & Authorization
+
+Who are you?
+Are you allowed?
+Show your identity?
+What access you have?
+
+authentication happens first
+
+statefull application - when the server memory is set to true, statefull application.
+
+stateless application - when the server memory is state is set to false, stateless application.
+
+session id - OTP, token, captcha.
+
+Token - JSON Web Token
+
+Bearer token
+MAC token
+Grants
+
+genrated token -
+
+jwt.io - website to see decrypted form of token
+
+header - type of token, algo is used to develop the token
+payload/body - issuer  type, issuer time, expiry time, user id
+signature - same message has been transferred from one end to another
+
+CRUD operations -
+
+Create an employee -
+
+Base URI - base URL + endpoint
+
+Type of request - POST
+
+Payload/body - {
+  "emp_firstname": "string",
+  "emp_lastname": "string",
+  "emp_middle_name": "string",
+  "emp_gender": "Enter M for male or F for female",
+  "emp_birthday": "2024-03-10",
+  "emp_status": "string",
+  "emp_job_title": "string"
+}
+
+content-type = application/json
+
+authorization - bearer token -
+
+
+Response - 201
+
+after getting the response, status code is correct but body parameter is missing
+
+Database is not able to add this value/API-endpoint is not able to fetch the details from DB
+
+Create an employee - Get an employee
+
+query param - when we need to get specific detail from the bunch of data
+
+
+Updating an employee -
+
+hrm.syntaxtechs.net/syntaxapi/api/updateEmployee.php
+
+Type of method - PUT - (Updating the complete details of an employee)
+
+{
+  "employee_id": "103995A",
+  "emp_firstname": "thomas",
+  "emp_lastname": "kartal",
+  "emp_middle_name": "hobbes",
+  "emp_gender": "F",
+  "emp_birthday": "2014-03-09",
+  "emp_status": "doubtful",
+  "emp_job_title": "philosopher"
+}
+
+
+Create an employee - Get an employee
+
+Update an employee - Get an employee
+
+
+Update partial employee details -
+
+hrm.syntaxtechs.net/syntaxapi/api/updatePartialEmplyeesDetails.php
+
+Type of method - Patch
+
+{
+  "employee_id": "103995A",
+  "emp_middle_name": "hobbes Jr",
+  "emp_status": "Confirmed",
+  "emp_job_title": "Doctor"
+}
+
+
+PUT vs PATCH - 200 VS 201
+
+
+in put call, we update all the details (data replacement) - status code is here 200 since no new data has been added.
+in patch call, we update partial details (additional layer of data) - status code is 201 since we have added the layer of data.
+
+
+Delete Employee -
+
+Base URI = hrm.syntaxtechs.net/syntaxapi/api/deleteEmployee.php
+
+Type of method = Delete
+
+query param = employee_id = 104065A
+
+Authorizarion = Bearer token
+
+
+Create an employee - Get an employee
+
+Update an employee - Get an employee
+
+Update partial employee - Get an employee
+
+Delete employee - Get an employee
+
+Cookies - the small block of data which is used to store our information.
+
+in-house cookies
+third party cookies
+
+
+User story -
+create the employee
+verify the status code
+verify the body
+verify the headers
+
+We are testing in one environment
+testing the api in different env
+
+to validate the response and status code, we need to use chai assertion library in postman.
+
+
+Class 4 -
+
+recap -
+
+swagger -
+
+end points
+url
+required parameters and it's type
+method name
+
+
+CRUD -
+create
+retrieve
+update
+delete
+
+run collection - all request we can execute together
+
+environment variable - here we keep all the base URI of different environments
+gloabl variable - here we keep all the end points
+
+
+write user story -
+
+
+create an employee
+validate the employee is created
+validate the status code
+validate the body of the response
+validate the header of the response
+validate the speed/performance of api
+
+
+we need to write test in postmsan, we use programming language call javascript
+
+
+chai assertion - library - we use to validate response in postman
+
+postman object - pm object will be used to validate all the data
+
+
+create an employee -   prepare the request
+validate the employee is created -
+validate the status code
+validate the header of the response
+validate the speed/performance of api
+validate the body of the response
+
+
+postman comes with inbuilt javascript API
+pm is the object of postman that allows us to use different methods avialable in API chai library.
+
+pm.test (to write test, we need this)
+pm.expect (to expect something)
+pm.request
+pm.response
+pm.sendRequest
+
+
+update an employee -   prepare the request
+validate the employee is updated -
+validate the status code
+validate the header of the response
+validate the speed/performance of api
+validate the body of the response
+
+when we have multiple entries/records and we want to get specific record from there.
+
+Query parameter - it will give us specific record from the bunch of records.
+
+path parameter - it defined the path of different information under base URL (data warehouse)
+
+how to convert data in json in response.
+how to validate the keys and values.
+
+REST Assured -
+
+Class 5 -
+
+recap -
+
+Use of assertions in user story.
+
+chai assertion library
+
+javascript language is used for the assertions
+
+pm - postman object, using this object we call all the methods
+
+pm.test
+pm.expect
+pm.response
+
+using json object
+
+convert response into json
+and then compare values against keys in json format
+
+
+status code
+performance
+body/payload
+message
+headers
+
+
+Rest Assured -  it is a tool/library we use for API automation
+
+postman - a tool we use to test API's manually
+
+Rest web service - tool, language, framework - it allows us to send data in JSON format
+
+JSON object consist of keys and values
+
+javascript object notation -
+
+Rest assured - DSL (domain specific language)
+
+it is a library/tool is used for api automation
+
+
+Rest Assured - it follows behavioral driven development approach (BDD)
+
+In BDD
+given - pre condition
+when - perform actions
+then - expected result
+
+In Rest Assured
+given - prepare the request
+when - send the request / hitting the end point
+then - expected result
+
+base URI = base Url + endpoint
+
+prepare the request - base URI
+hitting the end point - we mention end point here
+
+in rest assured - base URI = Base URL
+
+RequestSpecification = in this, we specify the request we need to send to get
+the response
+
+we use @test from junit to run the test
+
+hamcrest matchers - this is the class which contains method to perform assertions
+
+jsonPath - it is a class which helps us to get the keys and values from the body/payload
+jsonPath() - this method belongs to jsonPath class
+
+Homework -
+prepare the request and validate the results
+getallemployees, getJobtitle, partiallyUpdateEmployee
+
+Class 6 -
+
+recap -
+sending the request
+hitting the end point
+getting the response
+validate the response
+
+rest assured - BDD approach
+given - prepare the request
+when - hitting the endpoint
+then - validating the response
+
+how we integrate rest assured with BDD
+
+feature file - we write scenario first
+step definition - for api steps
+runner class - to execute all api request
+
+we will create new APISteps package because the older steps package has hooks
+which we do not need in API
+
+we create constants class for API to keep all endpoints and headers
+
+Class 7 03.20.2024
+
+RECAP
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
